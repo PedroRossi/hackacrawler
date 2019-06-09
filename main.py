@@ -29,10 +29,9 @@ def extract_pdf_links_from_page(soup):
 def search(f_term, s_term, depth, outpath):
     q = f_term + '+' + s_term
     html_doc = req(q)
-    soup = BeautifulSoup(html_doc, 'html.parser') 
+    soup = BeautifulSoup(html_doc, 'html.parser')
     for i in range(depth):
         curr_links = extract_pdf_links_from_page(soup)
-        curr_links = list(set(curr_links))
         for l in curr_links:
             r = requests.get(l)
             if r.ok:
@@ -44,7 +43,6 @@ def search(f_term, s_term, depth, outpath):
                     name = l[l.rfind('/')+1:]
                 if not name.endswith('.pdf'):
                     name += '.pdf'
-                print(name)
                 path = './out/' + name
                 count = 1
                 lock.acquire()
@@ -71,7 +69,6 @@ def main(first_terms, second_terms, depth, outpath):
     for f_term in fts:
         for s_term in sts:
             # do this in a different thread
-            print('searching with ', f_term, ' and ', s_term)
             search(f_term, s_term, depth, outpath)
 
 if __name__ == '__main__':
